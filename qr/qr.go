@@ -21,8 +21,7 @@ func CreateQR(name string) error {
 
 	qr, _ := qr.Encode(name, qr.M, qr.Auto)
 	qr, _ = barcode.Scale(qr, 200, 200)
-	
-	//画像として保存
+
 	file, _ := os.Create("qr.png")
 	defer file.Close()
 
@@ -33,12 +32,11 @@ func CreateQR(name string) error {
 func QRScan() string {
 	webcam, _ := gocv.VideoCaptureDevice(0)
 	img := gocv.NewMat()
-	//Webカメラの準備
-	
 	var qrinfo string
 
 	for {
 		webcam.Read(&img)
+
 		qr, _ := img.ToImage()
 		qrimg := gozbar.FromImage(qr)
 		//ScanしたQRコードを画像に変換し，それを取り込む

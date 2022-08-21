@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"qr/qr"
+	"worktime_system/qr"
 
 	"github.com/therecipe/qt/widgets"
 )
@@ -16,7 +16,7 @@ func main() {
 	// ウィンドウ生成
 	window := widgets.NewQMainWindow(nil, 0)
 	window.SetMinimumSize2(500, 500)
-	window.SetWindowTitle("QR in GoQt")
+	window.SetWindowTitle("Worktime System")
 
 	// ウィジェットを作成し，NewQVBoxLayoutを使ってレイアウトを作成
 	// ウィンドウの中央にウィジェットを配置
@@ -32,23 +32,35 @@ func main() {
 
 	// ボタン生成，QRコード読み取り処理を行う
 	button := widgets.NewQPushButton2("QR Scan", nil)
+	button2 := widgets.NewQPushButton2("Create QR", nil)
+	button3 := widgets.NewQPushButton2("Register", nil)
+
+	widget.Layout().AddWidget(button)
+	widget.Layout().AddWidget(button2)
+	widget.Layout().AddWidget(button3)
+
+	button3.SetEnabled(false)
+
 	button.ConnectClicked(func(bool) {
 		res := qr.QRScan()
 		label.SetText("now: " + res)
 	})
-	widget.Layout().AddWidget(button)
 
 	// inputに入力された文字からQRコードを生成
-	button2 := widgets.NewQPushButton2("Register", nil)
 	button2.ConnectClicked(func(bool) {
 		err := qr.CreateQR(input.ToPlainText())
 		if err != nil {
 			widgets.QMessageBox_Critical(nil, "Error", err.Error(), widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
 		} else {
 			label.SetText("now:Registered" + input.ToPlainText())
+			button3.SetEnabled(true)
 		}
 	})
-	widget.Layout().AddWidget(button2)
+
+	button3.ConnectClicked(func(bool) {
+		widgets.QMessageBox_Information(nil, "Information", "Clicked", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		button3.SetEnabled(false)
+	})
 
 	// ウィンドウ表示
 	window.Show()

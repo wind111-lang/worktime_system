@@ -1,4 +1,4 @@
-module qr
+module worktime_system
 
 go 1.19
 
