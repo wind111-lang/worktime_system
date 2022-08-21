@@ -1,1 +1,1 @@
-# QRin_GoQt
+# Goin_Qt
