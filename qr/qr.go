@@ -13,13 +13,14 @@ import (
 	"gocv.io/x/gocv"
 )
 
-func CreateQR(name string) error {
+func CreateQR(name, age string) error {
 	//QRコードを作成する
-	if name == "" {
-		return fmt.Errorf("name is empty")
+	if name == "" || age == "" {
+		return fmt.Errorf("form empty")
 	}
+	json_qr := `{"name":"` + name + `","age":"` + age + `"}`
 
-	qr, _ := qr.Encode(name, qr.M, qr.Auto)
+	qr, _ := qr.Encode(json_qr, qr.M, qr.Auto)
 	qr, _ = barcode.Scale(qr, 200, 200)
 
 	file, _ := os.Create("qr.png")
