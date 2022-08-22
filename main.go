@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 
 	"worktime_system/qr"
@@ -18,6 +20,9 @@ func main() {
 	// QWidgetsをスタートさせるために必要な処理
 	app := widgets.NewQApplication(len(os.Args), os.Args)
 
+	var nameInput *widgets.QLineEdit
+	var ageInput *widgets.QLineEdit
+
 	// ウィンドウ生成
 	window := widgets.NewQMainWindow(nil, 0)
 	window.SetMinimumSize2(500, 500)
@@ -32,8 +37,14 @@ func main() {
 	// 文字を表示させるラベルの生成，文字入力フォームの作成
 	label := widgets.NewQLabel2("now:", nil, 0)
 	widget.Layout().AddWidget(label)
-	input := widgets.NewQPlainTextEdit2("", nil)
-	widget.Layout().AddWidget(input)
+
+	nameInput = widgets.NewQLineEdit(nil)
+	nameInput.SetPlaceholderText("name")
+	widget.Layout().AddWidget(nameInput)
+
+	ageInput = widgets.NewQLineEdit(nil)
+	ageInput.SetPlaceholderText("age")
+	widget.Layout().AddWidget(ageInput)
 
 	// ボタン生成，QRコード読み取り処理を行う
 	button := widgets.NewQPushButton2("QR Scan", nil)
@@ -48,24 +59,25 @@ func main() {
 
 	button.ConnectClicked(func(bool) {
 		res := qr.QRScan()
-		// var person Person
-		// err := json.Unmarshal([]byte(res), &person)
-		// if err != nil {
-		// 	widgets.QMessageBox_Critical(nil, "Error", err.Error(), widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
-		// } else {
-		// 	label.SetText("now: " + person.Name)
-		// 	fmt.Println(person)
-		// }
-		label.SetText("now:" + res)
+		
+		var person Person
+		err := json.Unmarshal([]byte(res), &person)
+		if err != nil {
+			widgets.QMessageBox_Critical(nil, "Error", err.Error(), widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		} else {
+			label.SetText("now: " + person.Name)
+			fmt.Println(person)
+		}
+		//label.SetText("now:" + res)
 	})
 
 	// inputに入力された文字からQRコードを生成
 	button2.ConnectClicked(func(bool) {
-		err := qr.CreateQR(input.ToPlainText())
+		err := qr.CreateQR(nameInput.Text(), ageInput.Text())
 		if err != nil {
 			widgets.QMessageBox_Critical(nil, "Error", err.Error(), widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
 		} else {
-			label.SetText("now:Registered" + input.ToPlainText())
+			label.SetText("now:Registered")
 			button3.SetEnabled(true)
 		}
 	})
