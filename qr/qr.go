@@ -37,6 +37,10 @@ func QRScan() string {
 	for {
 		webcam.Read(&img)
 
+		if img.Empty() {
+			continue
+		}
+
 		qr, _ := img.ToImage()
 		qrimg := gozbar.FromImage(qr)
 		//ScanしたQRコードを画像に変換し，それを取り込む
@@ -53,7 +57,7 @@ func QRScan() string {
 
 		if res == nil { //Scanできた場合，結果を表示(resはerror handling!)
 			qrimg.First().Each(func(r string) {
-				fmt.Println(r)
+				//fmt.Println(r)
 				qrinfo = r
 			})
 			webcam.Close()
