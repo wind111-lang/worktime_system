@@ -8,6 +8,11 @@ import (
 	"github.com/therecipe/qt/widgets"
 )
 
+type Person struct {
+	Name string `json:"name"`
+	Age  int    `json:"age,string"`
+}
+
 func main() {
 
 	// QWidgetsをスタートさせるために必要な処理
@@ -43,7 +48,15 @@ func main() {
 
 	button.ConnectClicked(func(bool) {
 		res := qr.QRScan()
-		label.SetText("now: " + res)
+		// var person Person
+		// err := json.Unmarshal([]byte(res), &person)
+		// if err != nil {
+		// 	widgets.QMessageBox_Critical(nil, "Error", err.Error(), widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
+		// } else {
+		// 	label.SetText("now: " + person.Name)
+		// 	fmt.Println(person)
+		// }
+		label.SetText("now:" + res)
 	})
 
 	// inputに入力された文字からQRコードを生成
