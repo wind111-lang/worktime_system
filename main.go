@@ -6,7 +6,9 @@ import (
 	"os"
 
 	"worktime_system/qr"
+	"worktime_system/susys"
 
+	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/widgets"
 )
 
@@ -38,6 +40,17 @@ func main() {
 	label := widgets.NewQLabel2("now:", nil, 0)
 	widget.Layout().AddWidget(label)
 
+	table := widgets.NewQTableWidget(nil)
+	table.SetRowCount(10)
+	table.SetColumnCount(4)
+	table.SetHorizontalHeaderLabels([]string{"名前", "従業員コード", "ステータス", "出社時刻"})
+	table.SetEditTriggers(widgets.QAbstractItemView__NoEditTriggers)
+	table.AddScrollBarWidget(widgets.NewQScrollBar2(core.Qt__Vertical, nil), core.Qt__AlignRight)
+
+	//table.SetItem(0, 0, widgets.NewQTableWidgetItem2("test", 0))
+
+	widget.Layout().AddWidget(table)
+
 	nameInput = widgets.NewQLineEdit(nil)
 	nameInput.SetPlaceholderText("name")
 	widget.Layout().AddWidget(nameInput)
@@ -50,16 +63,18 @@ func main() {
 	button := widgets.NewQPushButton2("QR Scan", nil)
 	button2 := widgets.NewQPushButton2("Create QR", nil)
 	button3 := widgets.NewQPushButton2("Register", nil)
+	button4 := widgets.NewQPushButton2("New Window", nil)
 
 	widget.Layout().AddWidget(button)
 	widget.Layout().AddWidget(button2)
 	widget.Layout().AddWidget(button3)
+	widget.Layout().AddWidget(button4)
 
 	button3.SetEnabled(false)
 
 	button.ConnectClicked(func(bool) {
 		res := qr.QRScan()
-		
+
 		var person Person
 		err := json.Unmarshal([]byte(res), &person)
 		if err != nil {
@@ -85,6 +100,11 @@ func main() {
 	button3.ConnectClicked(func(bool) {
 		widgets.QMessageBox_Information(nil, "Information", "Clicked", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
 		button3.SetEnabled(false)
+	})
+
+	button4.ConnectClicked(func(bool) {
+		susys.NewWindow(button4)
+		button4.SetEnabled(false)
 	})
 
 	// ウィンドウ表示
