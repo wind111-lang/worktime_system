@@ -14,6 +14,7 @@ func NewWindow(btn *widgets.QPushButton) {
 	widget := widgets.NewQWidget(nil, 0)
 	widget.SetLayout(widgets.NewQVBoxLayout())
 	window.SetCentralWidget(widget)
+	// ウインドウ作成処理
 
 	button := widgets.NewQPushButton2("Close", nil)
 	widget.Layout().AddWidget(button)
@@ -21,6 +22,7 @@ func NewWindow(btn *widgets.QPushButton) {
 	button.ConnectClicked(func(bool) {
 		btn.SetEnabled(true)
 		window.Close()
+		//押したらウィンドウが閉じられる
 	})
 
 	window.Show()
