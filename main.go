@@ -39,13 +39,14 @@ func main() {
 	// 文字を表示させるラベルの生成，文字入力フォームの作成
 	label := widgets.NewQLabel2("now:", nil, 0)
 	widget.Layout().AddWidget(label)
-
+	
+	// 表作成
 	table := widgets.NewQTableWidget(nil)
 	table.SetRowCount(10)
 	table.SetColumnCount(4)
 	table.SetHorizontalHeaderLabels([]string{"名前", "従業員コード", "ステータス", "出社時刻"})
-	table.SetEditTriggers(widgets.QAbstractItemView__NoEditTriggers)
-	table.AddScrollBarWidget(widgets.NewQScrollBar2(core.Qt__Vertical, nil), core.Qt__AlignRight)
+	table.SetEditTriggers(widgets.QAbstractItemView__NoEditTriggers)// 表編集無効処理
+	table.AddScrollBarWidget(widgets.NewQScrollBar2(core.Qt__Vertical, nil), core.Qt__AlignRight)// 右にスクロールバーを設置
 
 	//table.SetItem(0, 0, widgets.NewQTableWidgetItem2("test", 0))
 
@@ -58,8 +59,9 @@ func main() {
 	ageInput = widgets.NewQLineEdit(nil)
 	ageInput.SetPlaceholderText("age")
 	widget.Layout().AddWidget(ageInput)
+	//名前と年齢を入力するフォーム(wip)
 
-	// ボタン生成，QRコード読み取り処理を行う
+	// ボタン生成，QRコード読み取り処理などを行う
 	button := widgets.NewQPushButton2("QR Scan", nil)
 	button2 := widgets.NewQPushButton2("Create QR", nil)
 	button3 := widgets.NewQPushButton2("Register", nil)
@@ -96,12 +98,14 @@ func main() {
 			button3.SetEnabled(true)
 		}
 	})
-
+	
+	// SetEnable test
 	button3.ConnectClicked(func(bool) {
 		widgets.QMessageBox_Information(nil, "Information", "Clicked", widgets.QMessageBox__Ok, widgets.QMessageBox__Ok)
 		button3.SetEnabled(false)
 	})
-
+	
+	//Call New Window test
 	button4.ConnectClicked(func(bool) {
 		susys.NewWindow(button4)
 		button4.SetEnabled(false)
